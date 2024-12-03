@@ -49,7 +49,7 @@ class PluginStatus {
             clearTimeout(PluginStatus.revertTimeout);
             PluginStatus.revertTimeout = undefined;
         }
-        this.setPluginStatus(`${transientStatus.charAt(0).toUpperCase() + transientStatus.slice(1)}...`, true);
+        this.setPluginStatus(`${transientStatus.charAt(0).toUpperCase() + transientStatus.slice(1)}`, true);
         PluginStatus.revertTimeout = setTimeout(this.revertPluginStatus.bind(this), PluginStatus.revertSeconds * 1000);
     }
     revertPluginStatus() {
@@ -59,7 +59,7 @@ class PluginStatus {
     setPluginStatus(text, debug) {
         if (debug)
             PluginStatus.app.debug(text.charAt(0).toLowerCase() + text.slice(1));
-        PluginStatus.app.setPluginStatus(`${text.charAt(0).toUpperCase() + text.slice(1)}...`);
+        PluginStatus.app.setPluginStatus(`${text.charAt(0).toUpperCase() + text.slice(1)}`);
     }
 }
 exports.PluginStatus = PluginStatus;
