@@ -27,7 +27,7 @@ export class PluginStatus {
    *  message for the plugin and, optionally, configuring the time for
    *  which transient status messages will be displayed.
    * 
-   * @param app - handle to the Signal K app interface. 
+   * @param app - handle to Signal K app interface. 
    * @param defaultStatus - plugin status default text.
    * @param revertSeconds - number of seconds to display a transient
    *        status message.
