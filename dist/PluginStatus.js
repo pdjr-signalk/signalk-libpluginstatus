@@ -58,7 +58,7 @@ class PluginStatus {
     }
     setPluginStatus(text, debug) {
         if (debug)
-            PluginStatus.app.debug(text.charAt(0).toLowerCase + text.slice(0));
+            PluginStatus.app.debug(text.charAt(0).toLowerCase() + text.slice(0));
         PluginStatus.app.setPluginStatus(`${text.charAt(0).toUpperCase() + text.slice(1)}...`);
     }
 }

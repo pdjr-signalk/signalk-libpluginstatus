@@ -37,6 +37,6 @@ export declare class PluginStatus {
      */
     setDefaultStatus(defaultStatus: string): void;
     setStatus(transientStatus: string): void;
-    private revertPluginStatus;
-    private setPluginStatus;
+    revertPluginStatus(): void;
+    setPluginStatus(text: string, debug?: boolean): void;
 }

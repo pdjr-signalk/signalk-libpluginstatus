@@ -60,13 +60,13 @@ export class PluginStatus {
     PluginStatus.revertTimeout = setTimeout(this.revertPluginStatus, PluginStatus.revertSeconds * 1000)
   }
 
-  private revertPluginStatus() {
+  revertPluginStatus() {
     PluginStatus.revertTimeout = undefined;
     this.setPluginStatus(PluginStatus.defaultStatus, false);
   }
 
-  private setPluginStatus(text: string, debug?: boolean) {
-    if (debug) PluginStatus.app.debug(text.charAt(0).toLowerCase + text.slice(0));
+  setPluginStatus(text: string, debug?: boolean) {
+    if (debug) PluginStatus.app.debug(text.charAt(0).toLowerCase() + text.slice(0));
     PluginStatus.app.setPluginStatus(`${text.charAt(0).toUpperCase() + text.slice(1)}...`);
   }
 
