@@ -66,7 +66,7 @@ export class PluginStatus {
   }
 
   private setPluginStatus(text: string, debug?: boolean) {
-    if (debug) PluginStatus.app.debug(text);
+    if (debug) PluginStatus.app.debug(text.charAt(0).toLowerCase + text.slice(0));
     PluginStatus.app.setPluginStatus(`${text.charAt(0).toUpperCase() + text.slice(1)}...`);
   }
 
