@@ -18,36 +18,56 @@ export class PluginStatus {
   static DEFAULT_REVERT_SECONDS: number = 10;
 
   static app: any = undefined;
-  static defaultStatus: string | undefined = undefined;
+  static defaultStatus: string = '';
   static revertSeconds: number = PluginStatus.DEFAULT_REVERT_SECONDS;
   static revertTimeout: NodeJS.Timeout | undefined = undefined;
 
+  /**
+   *  Create a new PluginStatus instance, setting a default status
+   *  message for the plugin and, optionally, configuring the time for
+   *  which transient status messages will be displayed.
+   * 
+   * @param app - handle to the Signal K app interface. 
+   * @param defaultStatus - plugin status default text.
+   * @param revertSeconds - number of seconds to display a transient
+   *        status message.
+   */
   constructor(app: any, defaultStatus: string, revertSeconds?: number) {
     PluginStatus.app = app;
-    PluginStatus.defaultStatus = defaultStatus;
+    PluginStatus.defaultStatus = defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1);
     PluginStatus.revertSeconds = (revertSeconds)?revertSeconds:PluginStatus.DEFAULT_REVERT_SECONDS;
 
-    if (PluginStatus.defaultStatus) app.setPluginStatus(PluginStatus.defaultStatus);
+    if (PluginStatus.defaultStatus) this.setPluginStatus(PluginStatus.defaultStatus, true);
   }
 
-  setDefaultStatus(message: string) {
-    PluginStatus.defaultStatus = message;
-    if (!PluginStatus.revertTimeout) PluginStatus.app.setPluginStatus(PluginStatus.defaultStatus);
+  /**
+   * Update the plugin status default text with a new value.
+   *  
+   * @param defaultStatus - new plugin status default text.
+   */
+
+  setDefaultStatus(defaultStatus: string) {
+    PluginStatus.defaultStatus = defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1);
+    if (!PluginStatus.revertTimeout) this.setPluginStatus(PluginStatus.defaultStatus, true);
   }
 
-  setStatus(message: string) {
+  setStatus(transientStatus: string) {
     if (PluginStatus.revertTimeout) {
       clearTimeout(PluginStatus.revertTimeout);
       PluginStatus.revertTimeout = undefined;
     }
-    PluginStatus.app.debug(`${message}...`);
-    PluginStatus.app.setPluginStatus(`${message}...`);
-    PluginStatus.revertTimeout = setTimeout(this.revertStatus, PluginStatus.revertSeconds * 1000)
+    this.setPluginStatus(`${transientStatus.charAt(0).toUpperCase() + transientStatus.slice(1)}...`, true);
+    PluginStatus.revertTimeout = setTimeout(this.revertPluginStatus, PluginStatus.revertSeconds * 1000)
   }
 
-  revertStatus() {
+  private revertPluginStatus() {
     PluginStatus.revertTimeout = undefined;
-    PluginStatus.app.setPluginStatus(PluginStatus.defaultStatus);
+    this.setPluginStatus(PluginStatus.defaultStatus, false);
+  }
+
+  private setPluginStatus(text: string, debug?: boolean) {
+    if (debug) PluginStatus.app.debug(text);
+    PluginStatus.app.setPluginStatus(`${text.charAt(0).toUpperCase() + text.slice(1)}...`);
   }
 
 }
