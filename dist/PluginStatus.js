@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PluginStatus = void 0;
 /**********************************************************************
  * Copyright 2024 Paul Reeve <preeve@pdjr.eu>
  *
@@ -13,19 +15,27 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * PluginStatus provides a wrapper around the setPluginStatus() method
+ * of the Signal K plugin API. This method allows a plugin to write a
+ * message to its dashboard status display.
+ *
+ * This wrapper introduces the idea of default and transient status
+ * messages. A default status message one which is normally displayed,
+ * whilst a transient message is one which will replace the default
+ * message on the dashboard for a short period of time before being
+ * automatically be overwritten by the default.
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.PluginStatus = void 0;
 class PluginStatus {
     /**
-     *  Create a new PluginStatus instance, setting a default status
-     *  message for the plugin and, optionally, configuring the time for
-     *  which transient status messages will be displayed.
+     * Create a new PluginStatus instance, setting a default status
+     * message and, optionally, configuring the time for which transient
+     * status messages will be displayed.
      *
      * @param app - handle to Signal K app interface.
      * @param defaultStatus - plugin status default text.
      * @param revertSeconds - number of seconds to display a transient
-     *        status message.
+     *        status message (overrides DEFAULT_REVERT_SECONDS).
      */
     constructor(app, defaultStatus, revertSeconds) {
         PluginStatus.app = app;
@@ -44,6 +54,12 @@ class PluginStatus {
         if (!PluginStatus.revertTimeout)
             this.setPluginStatus(PluginStatus.defaultStatus, true);
     }
+    /**
+     * Immediately display a status message which will be reverted to the
+     * default in due course.
+     *
+     * @param transientStatus - the message to be displayed.
+     */
     setStatus(transientStatus) {
         if (PluginStatus.revertTimeout) {
             clearTimeout(PluginStatus.revertTimeout);

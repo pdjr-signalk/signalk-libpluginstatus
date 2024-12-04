@@ -12,6 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * PluginStatus provides a wrapper around the setPluginStatus() method
+ * of the Signal K plugin API. This method allows a plugin to write a
+ * message to its dashboard status display.
+ *
+ * This wrapper introduces the idea of default and transient status
+ * messages. A default status message one which is normally displayed,
+ * whilst a transient message is one which will replace the default
+ * message on the dashboard for a short period of time before being
+ * automatically be overwritten by the default.
  */
 export declare class PluginStatus {
     static DEFAULT_REVERT_SECONDS: number;
@@ -20,14 +30,14 @@ export declare class PluginStatus {
     static revertSeconds: number;
     static revertTimeout: NodeJS.Timeout | undefined;
     /**
-     *  Create a new PluginStatus instance, setting a default status
-     *  message for the plugin and, optionally, configuring the time for
-     *  which transient status messages will be displayed.
+     * Create a new PluginStatus instance, setting a default status
+     * message and, optionally, configuring the time for which transient
+     * status messages will be displayed.
      *
      * @param app - handle to Signal K app interface.
      * @param defaultStatus - plugin status default text.
      * @param revertSeconds - number of seconds to display a transient
-     *        status message.
+     *        status message (overrides DEFAULT_REVERT_SECONDS).
      */
     constructor(app: any, defaultStatus: string, revertSeconds?: number);
     /**
@@ -36,7 +46,13 @@ export declare class PluginStatus {
      * @param defaultStatus - new plugin status default text.
      */
     setDefaultStatus(defaultStatus: string): void;
+    /**
+     * Immediately display a status message which will be reverted to the
+     * default in due course.
+     *
+     * @param transientStatus - the message to be displayed.
+     */
     setStatus(transientStatus: string): void;
-    revertPluginStatus(): void;
-    setPluginStatus(text: string, debug?: boolean): void;
+    private revertPluginStatus;
+    private setPluginStatus;
 }

@@ -12,8 +12,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ *
+ * PluginStatus provides a wrapper around the setPluginStatus() method
+ * of the Signal K plugin API. This method allows a plugin to write a
+ * message to its dashboard status display.
+ * 
+ * This wrapper introduces the idea of default and transient status
+ * messages. A default status message one which is normally displayed,
+ * whilst a transient message is one which will replace the default
+ * message on the dashboard for a short period of time before being
+ * automatically be overwritten by the default.
  */
-
 export class PluginStatus {
   static DEFAULT_REVERT_SECONDS: number = 10;
 
@@ -23,14 +32,14 @@ export class PluginStatus {
   static revertTimeout: NodeJS.Timeout | undefined = undefined;
 
   /**
-   *  Create a new PluginStatus instance, setting a default status
-   *  message for the plugin and, optionally, configuring the time for
-   *  which transient status messages will be displayed.
+   * Create a new PluginStatus instance, setting a default status
+   * message and, optionally, configuring the time for which transient
+   * status messages will be displayed.
    * 
    * @param app - handle to Signal K app interface. 
    * @param defaultStatus - plugin status default text.
    * @param revertSeconds - number of seconds to display a transient
-   *        status message.
+   *        status message (overrides DEFAULT_REVERT_SECONDS).
    */
   constructor(app: any, defaultStatus: string, revertSeconds?: number) {
     PluginStatus.app = app;
@@ -45,12 +54,17 @@ export class PluginStatus {
    *  
    * @param defaultStatus - new plugin status default text.
    */
-
   setDefaultStatus(defaultStatus: string) {
     PluginStatus.defaultStatus = defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1);
     if (!PluginStatus.revertTimeout) this.setPluginStatus(PluginStatus.defaultStatus, true);
   }
 
+  /**
+   * Immediately display a status message which will be reverted to the
+   * default in due course.
+   * 
+   * @param transientStatus - the message to be displayed.
+   */
   setStatus(transientStatus: string) {
     if (PluginStatus.revertTimeout) {
       clearTimeout(PluginStatus.revertTimeout);
@@ -60,12 +74,12 @@ export class PluginStatus {
     PluginStatus.revertTimeout = setTimeout(this.revertPluginStatus.bind(this), PluginStatus.revertSeconds * 1000);
   }
 
-  revertPluginStatus() {
+  private revertPluginStatus() {
     PluginStatus.revertTimeout = undefined;
     this.setPluginStatus(PluginStatus.defaultStatus, false);
   }
 
-  setPluginStatus(text: string, debug?: boolean) {
+  private setPluginStatus(text: string, debug?: boolean) {
     if (debug) PluginStatus.app.debug(text.charAt(0).toLowerCase() + text.slice(1));
     PluginStatus.app.setPluginStatus(`${text.charAt(0).toUpperCase() + text.slice(1)}`);
   }
