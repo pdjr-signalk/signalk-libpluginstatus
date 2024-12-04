@@ -29,6 +29,7 @@ export declare class PluginStatus {
     static defaultStatus: string;
     static revertSeconds: number;
     static revertTimeout: NodeJS.Timeout | undefined;
+    static debug: boolean;
     /**
      * Create a new PluginStatus instance, setting a default status
      * message and, optionally, configuring the time for which transient
@@ -39,7 +40,7 @@ export declare class PluginStatus {
      * @param revertSeconds - number of seconds to display a transient
      *        status message (overrides DEFAULT_REVERT_SECONDS).
      */
-    constructor(app: any, defaultStatus: string, revertSeconds?: number);
+    constructor(app: any, defaultStatus: string, revertSeconds?: number, debug?: boolean);
     /**
      * Update the plugin status default text with a new value.
      *

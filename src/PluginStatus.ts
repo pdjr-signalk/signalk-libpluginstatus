@@ -30,6 +30,7 @@ export class PluginStatus {
   static defaultStatus: string = '';
   static revertSeconds: number = PluginStatus.DEFAULT_REVERT_SECONDS;
   static revertTimeout: NodeJS.Timeout | undefined = undefined;
+  static debug: boolean = false;
 
   /**
    * Create a new PluginStatus instance, setting a default status
@@ -41,10 +42,11 @@ export class PluginStatus {
    * @param revertSeconds - number of seconds to display a transient
    *        status message (overrides DEFAULT_REVERT_SECONDS).
    */
-  constructor(app: any, defaultStatus: string, revertSeconds?: number) {
+  constructor(app: any, defaultStatus: string, revertSeconds?: number, debug?: boolean) {
     PluginStatus.app = app;
     PluginStatus.defaultStatus = defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1);
     PluginStatus.revertSeconds = (revertSeconds)?revertSeconds:PluginStatus.DEFAULT_REVERT_SECONDS;
+    PluginStatus.debug = (debug)?debug:false;
 
     if (PluginStatus.defaultStatus) this.setPluginStatus(PluginStatus.defaultStatus, true);
   }
@@ -80,7 +82,7 @@ export class PluginStatus {
   }
 
   private setPluginStatus(text: string, debug?: boolean) {
-    if (debug) PluginStatus.app.debug(text.charAt(0).toLowerCase() + text.slice(1));
+    if (debug || PluginStatus.debug) PluginStatus.app.debug(text.charAt(0).toLowerCase() + text.slice(1));
     PluginStatus.app.setPluginStatus(`${text.charAt(0).toUpperCase() + text.slice(1)}`);
   }
 
