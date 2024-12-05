@@ -56,6 +56,7 @@ export class PluginStatus {
    * @param defaultStatus - new plugin status default text.
    */
   setDefaultStatus(defaultStatus: string) {
+    PluginStatus.app.debug(`setDefaultStatus('${defaultStatus}')...`);
     PluginStatus.defaultStatus = (defaultStatus == '')?'':(defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1));
     if (!PluginStatus.revertTimeout) this.setPluginStatus(PluginStatus.defaultStatus, true);
   }
@@ -67,6 +68,7 @@ export class PluginStatus {
    * @param transientStatus - the message to be displayed.
    */
   setStatus(transientStatus: string) {
+    PluginStatus.app.debug(`setStatus('${transientStatus}')...`);
     if (PluginStatus.revertTimeout) {
       clearTimeout(PluginStatus.revertTimeout);
       PluginStatus.revertTimeout = undefined;
