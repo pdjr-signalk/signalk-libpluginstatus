@@ -37,7 +37,7 @@ class PluginStatus {
      * @param revertSeconds - number of seconds to display a transient
      *        status message (overrides DEFAULT_REVERT_SECONDS).
      */
-    constructor(app, defaultStatus, revertSeconds = 3, debug = false) {
+    constructor(app, defaultStatus, revertSeconds = 3) {
         this.app = undefined;
         this.defaultStatus = '';
         this.revertSeconds = 0;
@@ -46,7 +46,6 @@ class PluginStatus {
         this.app = app;
         this.defaultStatus = (defaultStatus == '') ? '' : (defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1));
         this.revertSeconds = revertSeconds;
-        this.debug = debug;
         this.setPluginStatus(this.defaultStatus, true);
     }
     /**
@@ -55,7 +54,6 @@ class PluginStatus {
      * @param defaultStatus - new plugin status default text.
      */
     setDefaultStatus(defaultStatus) {
-        this.app.debug(`setDefaultStatus('${defaultStatus}')...`);
         this.defaultStatus = (defaultStatus == '') ? '' : (defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1));
         if (!this.revertTimeout)
             this.setPluginStatus(this.defaultStatus, true);
@@ -67,7 +65,6 @@ class PluginStatus {
      * @param transientStatus - the message to be displayed.
      */
     setStatus(transientStatus) {
-        this.app.debug(`setStatus('${transientStatus}')...`);
         if (this.revertTimeout) {
             clearTimeout(this.revertTimeout);
             this.revertTimeout = undefined;
@@ -80,7 +77,7 @@ class PluginStatus {
         this.setPluginStatus(this.defaultStatus, false);
     }
     setPluginStatus(text, debug = false) {
-        if ((debug === true || this.debug === true) && (text != ''))
+        if ((debug === true) && (text != ''))
             this.app.debug(text.charAt(0).toLowerCase() + text.slice(1));
         this.app.setPluginStatus((text == '') ? '' : `${text.charAt(0).toUpperCase() + text.slice(1)}`);
     }

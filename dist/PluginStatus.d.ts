@@ -39,7 +39,7 @@ export declare class PluginStatus {
      * @param revertSeconds - number of seconds to display a transient
      *        status message (overrides DEFAULT_REVERT_SECONDS).
      */
-    constructor(app: any, defaultStatus: string, revertSeconds?: number, debug?: boolean);
+    constructor(app: any, defaultStatus: string, revertSeconds?: number);
     /**
      * Update the plugin status default text with a new value.
      *
