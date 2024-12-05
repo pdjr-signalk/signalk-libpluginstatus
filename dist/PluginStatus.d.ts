@@ -24,11 +24,11 @@
  * automatically be overwritten by the default.
  */
 export declare class PluginStatus {
-    static app: any;
-    static defaultStatus: string;
-    static revertSeconds: number;
-    static revertTimeout: NodeJS.Timeout | undefined;
-    static debug: boolean;
+    app: any;
+    defaultStatus: string;
+    revertSeconds: number;
+    debug: boolean;
+    revertTimeout: NodeJS.Timeout | undefined;
     /**
      * Create a new PluginStatus instance, setting a default status
      * message and, optionally, configuring the time for which transient
