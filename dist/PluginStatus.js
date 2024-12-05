@@ -37,11 +37,11 @@ class PluginStatus {
      * @param revertSeconds - number of seconds to display a transient
      *        status message (overrides DEFAULT_REVERT_SECONDS).
      */
-    constructor(app, defaultStatus, revertSeconds, debug) {
+    constructor(app, defaultStatus, revertSeconds = 3, debug = false) {
         PluginStatus.app = app;
-        PluginStatus.defaultStatus = defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1);
-        PluginStatus.revertSeconds = (revertSeconds) ? revertSeconds : PluginStatus.DEFAULT_REVERT_SECONDS;
-        PluginStatus.debug = (debug) ? debug : false;
+        PluginStatus.defaultStatus = (defaultStatus == '') ? '' : (defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1));
+        PluginStatus.revertSeconds = revertSeconds;
+        PluginStatus.debug = debug;
         if (PluginStatus.defaultStatus)
             this.setPluginStatus(PluginStatus.defaultStatus, true);
     }
@@ -51,7 +51,7 @@ class PluginStatus {
      * @param defaultStatus - new plugin status default text.
      */
     setDefaultStatus(defaultStatus) {
-        PluginStatus.defaultStatus = defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1);
+        PluginStatus.defaultStatus = (defaultStatus == '') ? '' : (defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1));
         if (!PluginStatus.revertTimeout)
             this.setPluginStatus(PluginStatus.defaultStatus, true);
     }
@@ -66,23 +66,22 @@ class PluginStatus {
             clearTimeout(PluginStatus.revertTimeout);
             PluginStatus.revertTimeout = undefined;
         }
-        this.setPluginStatus(`${transientStatus.charAt(0).toUpperCase() + transientStatus.slice(1)}`, true);
+        this.setPluginStatus((transientStatus == '') ? '' : `${transientStatus.charAt(0).toUpperCase() + transientStatus.slice(1)}`, true);
         PluginStatus.revertTimeout = setTimeout(this.revertPluginStatus.bind(this), PluginStatus.revertSeconds * 1000);
     }
     revertPluginStatus() {
         PluginStatus.revertTimeout = undefined;
         this.setPluginStatus(PluginStatus.defaultStatus, false);
     }
-    setPluginStatus(text, debug) {
-        if (debug || PluginStatus.debug)
+    setPluginStatus(text, debug = false) {
+        if (debug === true || PluginStatus.debug === true)
             PluginStatus.app.debug(text.charAt(0).toLowerCase() + text.slice(1));
         PluginStatus.app.setPluginStatus(`${text.charAt(0).toUpperCase() + text.slice(1)}`);
     }
 }
 exports.PluginStatus = PluginStatus;
-PluginStatus.DEFAULT_REVERT_SECONDS = 10;
 PluginStatus.app = undefined;
 PluginStatus.defaultStatus = '';
-PluginStatus.revertSeconds = PluginStatus.DEFAULT_REVERT_SECONDS;
+PluginStatus.revertSeconds = 0;
 PluginStatus.revertTimeout = undefined;
 PluginStatus.debug = false;

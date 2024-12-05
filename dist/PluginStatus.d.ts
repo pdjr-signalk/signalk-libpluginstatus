@@ -24,7 +24,6 @@
  * automatically be overwritten by the default.
  */
 export declare class PluginStatus {
-    static DEFAULT_REVERT_SECONDS: number;
     static app: any;
     static defaultStatus: string;
     static revertSeconds: number;
