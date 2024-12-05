@@ -84,8 +84,8 @@ export class PluginStatus {
   }
 
   private setPluginStatus(text: string, debug: boolean = false) {
-    if (debug === true || this.debug === true) this.app.debug(text.charAt(0).toLowerCase() + text.slice(1));
-    this.app.setPluginStatus(`${text.charAt(0).toUpperCase() + text.slice(1)}`);
+    if ((debug === true || this.debug === true) && (text != '')) this.app.debug(text.charAt(0).toLowerCase() + text.slice(1));
+    this.app.setPluginStatus((text == '')?'':`${text.charAt(0).toUpperCase() + text.slice(1)}`);
   }
 
 }
