@@ -44,7 +44,7 @@ export class PluginStatus {
    */
   constructor(app: any, defaultStatus: string, revertSeconds: number = 3) {
     this.app = app;
-    this.defaultStatus = (defaultStatus == '')?'':(defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1));
+    this.defaultStatus = (defaultStatus.length > 0)?defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1):'';
     this.revertSeconds = revertSeconds;
 
     this.setPluginStatus(this.defaultStatus, true);
@@ -56,7 +56,7 @@ export class PluginStatus {
    * @param defaultStatus - new plugin status default text.
    */
   setDefaultStatus(defaultStatus: string) {
-    this.defaultStatus = (defaultStatus == '')?'':(defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1));
+    this.defaultStatus = (defaultStatus.length > 0)?defaultStatus.charAt(0).toUpperCase() + defaultStatus.slice(1):'';
     if (!this.revertTimeout) this.setPluginStatus(this.defaultStatus, true);
   }
 
@@ -71,7 +71,7 @@ export class PluginStatus {
       clearTimeout(this.revertTimeout);
       this.revertTimeout = undefined;
     }
-    this.setPluginStatus((transientStatus == '')?'':`${transientStatus.charAt(0).toUpperCase() + transientStatus.slice(1)}`, true);
+    this.setPluginStatus((transientStatus.length > 0)?`${transientStatus.charAt(0).toUpperCase() + transientStatus.slice(1)}`:'', true);
     this.revertTimeout = setTimeout(this.revertPluginStatus.bind(this), this.revertSeconds * 1000);
   }
 
@@ -81,8 +81,8 @@ export class PluginStatus {
   }
 
   private setPluginStatus(text: string, debug: boolean = false) {
-    if ((debug === true) && (text != '')) this.app.debug(text.charAt(0).toLowerCase() + text.slice(1));
-    this.app.setPluginStatus((text == '')?'':`${text.charAt(0).toUpperCase() + text.slice(1)}`);
+    if ((debug === true) && (text.length > 0)) this.app.debug(text.charAt(0).toLowerCase() + text.slice(1));
+    this.app.setPluginStatus((text.length > 0)?`${text.charAt(0).toUpperCase() + text.slice(1)}`:'');
   }
 
 }
